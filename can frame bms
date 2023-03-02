@@ -1,0 +1,179 @@
+  bms den veri alımı
+--------------------data 1 begin-------------------------
+SOCSOC of Total Voltage Current
+Priority + data ID+BMS address + PC address
+0x18900140 tx
+Priority + data ID+ PC address +BMS address
+0x18904001 rx
+
+byte 0 byte 1 : total voltage of pack / 10
+byte 4 byte 5 : mean current, offset is 30 000
+byte 6 byte 7 : SOC (0.1 %)
+--------------------data 1 end-------------------------
+--------------------data 2 begin-------------------------
+Maximum Minimum Voltage of Monomer
+Priority + data ID+BMS address + PC address
+0x18910140 tx
+Priority + data ID+ PC address +BMS address
+0x18914001 rx
+
+byte 0 byte 1 : max monomer voltage (mV)
+byte 2        : max unit voltage cell no
+byte 3 byte 4 : min monomer voltage (mV)
+byte 5        : min unit voltage cell no
+--------------------data 2 end-------------------------
+--------------------data 3 begin-------------------------
+Maximum minimum temperature of monomer
+Priority + data ID+BMS address + PC address
+0x18920140 tx
+Priority + data ID+ PC address +BMS address
+0x18924001 rx
+
+byte 0        : max monomer temp (40 offset, °C)
+byte 1        : max monomer temp cell no
+byte 2        : min monomer temp (40 offset, °C)
+byte 3        : min monomer temp cell no
+--------------------data 3 end-------------------------
+--------------------data 4 begin-------------------------
+Charge/discharge, MOS status
+Priority + data ID+BMS address + PC address
+0x18930140 tx
+Priority + data ID+ PC address +BMS address
+0x18934001 rx
+
+byte 0         : charge/discharge status (0 stationary ,1 charged ,2 discharged)
+byte 1         : charging MOS tube status
+byte 2         : discharge MOS tube state
+byte 3         : BMS life(0~255 cycles)
+byte 4 ~ byte7 : residual capacity (mAH)
+--------------------data 4 end-------------------------
+--------------------data 5 begin-------------------------
+Status Information 
+1Priority + data ID+BMS address + PC address
+0x18940140 tx
+Priority + data ID+ PC address +BMS address
+0x18944001 rx
+
+byte 0          : battery string
+byte 1          : temperature
+byte 2          : charger status (0 disconnected ,1 connected)
+byte 3          : load status (0 disconnected ,1 access)
+byte 4          : DO4State | DO3State | DO2State | DO1State | DI4State | DI3State | DI2State | DI1State
+byte 5 ~ byte 6 : charge/discharge cycles
+byte 7          : reserved
+--------------------data 5 end-------------------------
+--------------------data 6 begin-------------------------
+Cell voltage 1~48
+1Priority + data ID+BMS address + PC address
+0x18950140 tx
+Priority + data ID+ PC address +BMS address
+0x18954001 rx
+
+/** Each unit voltage of 2 byte, according
+* to the actual number of units sent, 
+* a maximum of 96 byte, divided into 16 frames sent
+*/
+
+byte 0          : frame number, starting from 0,0 xFF invalid
+byte 1 ~ byte 6 : monomer voltage (1 mV)
+byte 7          : reserved
+--------------------data 6 end-------------------------
+--------------------data 7 begin-------------------------
+Monomer temperature 1~16
+1Priority + data ID+BMS address + PC address
+0x18960140 tx
+Priority + data ID+ PC address +BMS address
+0x18964001 rx
+
+/** Each temperature is 1 byte, sent
+* according to the actual
+* number of temperature used, a maximum of 21 byte, divided into 3 frames
+*/
+
+byte 0          : frame number, starting at 0
+byte 1 ~ byte 7 : monomer temperature (40 Offset，°C)
+--------------------data 7 end-------------------------
+--------------------data 8 begin-------------------------
+Monomer equilibrium state
+1Priority + data ID+BMS address + PC address
+0x18970140 tx
+Priority + data ID+ PC address + BMS address
+0x18974001 rx
+
+0: OFF, 1: ON
+
+Bit 0  : monomer 1 equilibrium state
+
+...
+Bit 47 : monomer 48 equilibrium state
+Bit 48 ~ Bit 63 : reserved
+--------------------data 8 end-------------------------
+--------------------data 9 begin-------------------------
+Battery failure status
+1Priority + data ID+BMS address + PC address
+0x18980140 tx
+Priority + data ID+ PC address + BMS address
+0x18984001 rx
+
+0-> No error
+1-> Error
+
+Byte 0
+       Bit 0 : one stage warning of unit over voltage
+       Bit 1 : one stage warning of unit over voltage
+       Bit 2 : one stage warning of unit over voltage
+       Bit 3 : two stage warning of unit over voltage
+       Bit 4 : Total voltage is too high One alarm
+       Bit 5 : Total voltage is too high Level two alarm
+       Bit 6 : Total voltage is too low One alarm
+       Bit 7 : Total voltage is too low Level two alarm
+Byte 1
+       Bit 0 : Charging temperature too high. One alarm
+       Bit 1 : Charging temperature too high. Level two alarm
+       Bit 2 : Charging temperature too low. One alarm
+       Bit 3 : Charging temperature's too low. Level two alarm
+       Bit 4 : Discharge temperature is too high. One alarm
+       Bit 5 : Discharge temperature is too high. Level two alarm
+       Bit 6 : Discharge temperature is too low. One alarm
+       Bit 7 : Discharge temperature is too low. Level two alarm
+Byte 2
+       Bit 0: Charge over current. Level one alarm
+       Bit 1: Charge over current, level two alarm
+       Bit 2: Discharge over current. Level one alarm
+       Bit 3: Discharge over current, level two alarm
+       Bit 4: SOC is too high an alarm
+       Bit 5: SOC is too high. Alarm Two
+       Bit 6: SOC is too low. level one alarm
+       Bit 7: SOC is too low. level two alarm
+Byte 3
+       Bit 0: Excessive differential pressure level one alarm
+       Bit 1: Excessive differential pressure level two alarm
+       Bit 2: Excessive temperature difference level one alarm
+       Bit 3: Excessive temperature difference level two alarm    
+Byte 4
+       Bit 0: charging MOS overtemperature warning
+       Bit 1: discharge MOS overtemperature warning
+       Bit 2: charging MOS temperature detection sensor failure
+       Bit 3: discharge MOS temperature detection sensor failure
+       Bit 4: charging MOS adhesion failure
+       Bit 5: discharge MOS adhesion failure
+       Bit 6: charging MOS breaker failure
+       Bit 7: discharge MOS breaker failure   
+Byte 5      
+       Bit 0: AFE acquisition chip malfunction
+       Bit 1: monomer collect drop off
+       Bit 2: Single Temperature Sensor Fault
+       Bit 3: EEPROM storage failures
+       Bit 4: RTC clock malfunction
+       Bit 5: Precharge Failure
+       Bit 6: vehicle communications malfunction
+       Bit 7: intranet communication module malfunction  
+Byte 6：
+       Bit 0: Current Module Failure
+       Bit 1: main pressure detection module
+       Bit 2: Short circuit protection failure
+       Bit 3: Low Voltage No Charging
+       Bit 4: MOS GPS or soft switch MOS off
+       Bit 5~Bit7: Reserved
+Byte 7：fault code (if 0 x 03, show "fault code 3",0 do not show)
+--------------------data 9 end-------------------------
