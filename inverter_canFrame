@@ -1,1 +1,26 @@
 Baudrate 250k
+
+Data 1:
+ID          msg name  msg cycle     pck lenght
+----------  --------- ---------     -----------
+0xC07F0A7   VCU_MCU   10ms          8Bytes
+
+Byte 0   Byte 1 : VCU_TrqReq  Torque command        Requested torque sent by VCU in torque mode (offset -3200) (unit nm)
+Byte 2   Byte 3 : VCU_SpdReq  Speed command         Requested speed sent by VCU in speed mode (offset -32000) (unit rpm)
+Byte 4          : VCU_ModeReq Working mode command  (offset 0)
+     Bit0 Shut down 0： invalid 1：valid 
+     Bit1 idle 0：invalid 1：valid
+     Bit2 Positive drive  0：invalid 1：valid
+     Bit3 Braking 0：invalid 1：valid
+     Bit4 Reverse drive  0：invalid 1：valid
+     Bit5 control mode 0: torque 1: speed
+     Bit6 reserved
+     Bit7 reserved
+Byte 5          : 
+      Bit 0       : VCU_Enable      Enable signal            0x0: Not enabled by default,  0x1: Enable
+      Bit 1       : VCU_Discharge   Active discharge command 0x0: default disable, 0x1: start     
+      Bit 2 Bit 3 : VCU_HVCircuit   Bus state    0x0: Precharge closed, 0x1: Main connection closed, 0x2: Main connection disconnected, 0x3: Precharge off 
+      Bit 4 ~ Bit 7 + Byte 6 + Byte 7 Bit 0 ~ Bit 4 : Reserve Retain 
+      Byte 7 Bit 5 ~ Bit 8 VCU_Canlife VCU life signal
+      
+      
